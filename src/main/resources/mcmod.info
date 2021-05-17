@@ -1,0 +1,14 @@
+[
+    {
+        "modid": "tieredkits",
+        "name": "TieredKits",
+        "version": "1.0",
+        "description": "Kits with different levels of rewards",
+        "dependencies": [
+            "spongeapi@7.0.0-SNAPSHOT"
+        ],
+        "requiredMods": [
+            "spongeapi@7.0.0-SNAPSHOT"
+        ]
+    }
+]

@@ -1,0 +1,101 @@
+{
+  "kits": {
+    "books": {
+      "tiers": [
+        {
+          "available_after": 0,
+          "cascade": true,
+          "items": [
+            {
+              "type": "WRITTEN_BOOK",
+              "amount": 1,
+              "durability": 0,
+              "meta": {
+                "title": "Book Tier 1",
+                "author": "ShortCircuit908",
+                "pages": [
+                  "This is the default tier"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "available_after": 5,
+          "cooldown": 6000,
+          "cascade": true,
+          "items": [
+            {
+              "id": 387,
+              "amount": 1,
+              "durability": 0,
+              "meta": {
+                "title": "Book Tier 2",
+                "author": "ShortCircuit908",
+                "pages": [
+                  "This is the second tier"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "swords": {
+      "tiers": [
+        {
+          "available_after": 0,
+          "cascade": false,
+          "items": [
+            {
+              "type": "WOOD_SWORD",
+              "amount": 1,
+              "meta": {
+                "displayName": "Bellypoker"
+              }
+            }
+          ]
+        },
+        {
+          "available_after": 1,
+          "cascade": false,
+          "items": [
+            {
+              "type": "STONE_SWORD",
+              "amount": 1,
+              "meta": {
+                "displayName": "Bloodletter"
+              }
+            }
+          ]
+        },
+        {
+          "available_after": 2,
+          "cascade": false,
+          "items": [
+            {
+              "type": "IRON_SWORD",
+              "amount": 1,
+              "meta": {
+                "displayName": "Heartrender"
+              }
+            }
+          ]
+        },
+        {
+          "available_after": 3,
+          "cascade": false,
+          "items": [
+            {
+              "type": "DIAMOND_SWORD",
+              "amount": 1,
+              "meta": {
+                "displayName": "Soulwrecker"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

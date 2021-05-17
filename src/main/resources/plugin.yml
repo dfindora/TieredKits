@@ -1,0 +1,6 @@
+name: TieredKits
+version: 1.0-SNAPSHOT
+author: ShortCircuit908
+main: com.goldensandsmc.tieredkits.bukkit.TieredKits
+description: Kits that level up!
+loadbefore: [Essentials]

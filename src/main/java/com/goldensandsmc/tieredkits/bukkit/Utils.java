@@ -14,7 +14,7 @@ import org.bukkit.DyeColor;
 
 public class Utils
 {
-    private static final ImmutableMap<Object, Object> color_lookup =
+    private static final ImmutableMap<Object, Object> colorLookup =
             ImmutableMap.builder()
                  .put("WHITE", Color.WHITE)
                  .put("WHITE_DYE", DyeColor.WHITE.getColor())
@@ -76,12 +76,12 @@ public class Utils
 
     public static Color getColorFromName(String name)
     {
-        return (Color) color_lookup.get(name.toUpperCase());
+        return (Color) colorLookup.get(name.toUpperCase());
     }
 
     public static String getNameFromColor(Color color)
     {
-        for (Map.Entry<Object, Object> entry : color_lookup.entrySet())
+        for (Map.Entry<Object, Object> entry : colorLookup.entrySet())
         {
             if (entry.getValue().equals(color))
             {
@@ -93,23 +93,23 @@ public class Utils
 
     public static List<KitTier> getApplicableTiers(Kit kit, KitUsage usage)
     {
-        LinkedList<KitTier> applicable_tiers = new LinkedList<>();
-        KitTier max_tier = new KitTier(0, false, null, null);
+        LinkedList<KitTier> applicableTiers = new LinkedList<>();
+        KitTier maxTier = new KitTier(0, false, null, null);
         LinkedList<KitTier> tiers = kit.getTiers();
 
         for(KitTier tier : tiers)
         {
-            if ((long) tier.getAvailableAfter() <= usage.getTotalUses() && max_tier.getAvailableAfter() <= tier
+            if ((long) tier.getAvailableAfter() <= usage.getTotalUses() && maxTier.getAvailableAfter() <= tier
                     .getAvailableAfter())
             {
-                max_tier = tier;
+                maxTier = tier;
             }
-            if ((tier.getAvailableAfter() >= max_tier.getAvailableAfter() || !tier.doesCascade())
-                && tier.getAvailableAfter() != max_tier.getAvailableAfter())
+            if ((tier.getAvailableAfter() >= maxTier.getAvailableAfter() || !tier.doesCascade())
+                && tier.getAvailableAfter() != maxTier.getAvailableAfter())
             {
-                applicable_tiers.add(tier);
+                applicableTiers.add(tier);
             }
         }
-        return applicable_tiers;
+        return applicableTiers;
     }
 }

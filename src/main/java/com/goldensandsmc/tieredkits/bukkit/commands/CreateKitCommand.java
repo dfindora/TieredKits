@@ -65,11 +65,11 @@ public class CreateKitCommand extends BaseCommand<CommandSender>
 
 
             long cooldownSeconds = 0;
-            if (args.size() > 1)
+            if (args.size() > 0)
             {
                 try
                 {
-                    cooldownSeconds = Long.parseLong(args.get(2));
+                    cooldownSeconds = Long.parseLong(args.get(0));
                 }
                 catch (NumberFormatException e)
                 {

@@ -36,17 +36,18 @@ public class KitPreviewListener implements Listener
     public static void openKitPreview(Player player, String kit, List<KitTier> tiers)
     {
         int numRows = 0;
-        int bonus_items = 0;
+        int bonusItems = 0;
         for(KitTier tier : tiers)
         {
             numRows += (int) (Math.ceil(tier.getItems().size() / 9.0));
             for(BonusItem bonus : tier.getBonuses())
             {
-                bonus_items += bonus.getItems().size();
+                bonusItems += bonus.getItems().size();
             }
-            numRows += (int) (Math.ceil(bonus_items / 9.0));
+            numRows += (int) (Math.ceil(bonusItems / 9.0));
         }
 
+        //divider rows
         if (tiers.size() > 1)
         {
             numRows += tiers.size() - 1;
@@ -61,18 +62,18 @@ public class KitPreviewListener implements Listener
         {
             Inventory inventory = Bukkit.getServer().createInventory(player, numRows * 9, "Previewing kit: "
                                                                                           + kit);
-            for (int row = 0; row < tiers.size(); ++row)
+            int row = 0;
+            int column = 0;
+            for (KitTier tier : tiers)
             {
-                KitTier tier = tiers.get(row);
-                for (int column = 0; column < tier.getItems().size(); ++column)
+                //General items
+                for (ItemStack item : tier.getItems())
                 {
-                    ItemStack item = tier.getItems().get(column);
                     if (column == 9)
                     {
                         ++row;
                         column = 0;
                     }
-
                     int index = row * 9 + column;
                     item = item.clone();
                     ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getServer().getItemFactory()
@@ -82,14 +83,19 @@ public class KitPreviewListener implements Listener
                                                   "This tier does" + (tier.doesCascade() ? "" : " not") + " cascade"));
                     item.setItemMeta(meta);
                     inventory.setItem(index, item);
+                    ++column;
                 }
 
-                ++row;
+                //Bonus items
+                if (column != 0)
+                {
+                    ++row;
+                    column = 0;
+                }
                 for(BonusItem bonus : tier.getBonuses())
                 {
-                    for (int column = 0; column < bonus.getItems().size(); ++column)
+                    for (ItemStack item : bonus.getItems())
                     {
-                        ItemStack item = bonus.getItems().get(column);
                         if (column == 9)
                         {
                             ++row;
@@ -106,16 +112,23 @@ public class KitPreviewListener implements Listener
                                                       + " cascade"));
                         clone.setItemMeta(meta);
                         inventory.setItem(index, clone);
+                        ++column;
                     }
                 }
 
-                ++row;
-
+                //Divider row
+                if (column != 0)
+                {
+                    ++row;
+                }
                 try
                 {
-                    for (int column = 0; column < 9; ++column)
+                    if (row < numRows)
                     {
-                        inventory.setItem(row * 9 + column, barrier.clone());
+                        for (column = 0; column < 9; column++)
+                        {
+                            inventory.setItem(row * 9 + column, barrier.clone());
+                        }
                     }
                 }
                 catch (ArrayIndexOutOfBoundsException e)

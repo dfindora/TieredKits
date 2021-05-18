@@ -13,9 +13,9 @@ public class ChatComponentHelper
     {
         try
         {
-            Class<?> class_IChatBaseComponent$ChatSerializer =
+            Class<?> classIChatBaseComponent$ChatSerializer =
                     ReflectionHelper.getNMSClass("IChatBaseComponent$ChatSerializer");
-            Method method_a = ReflectionHelper.getMethod(class_IChatBaseComponent$ChatSerializer, "a", String.class);
+            Method method_a = ReflectionHelper.getMethod(classIChatBaseComponent$ChatSerializer, "a", String.class);
             method_a.setAccessible(true);
 
             try
@@ -24,12 +24,12 @@ public class ChatComponentHelper
             }
             catch (Exception e)
             {
-                Class<?> class_ChatMessage = ReflectionHelper.getNMSClass("ChatMessage");
-                Constructor<?> constructor_ChatMessage =
-                        ReflectionHelper.getConstructor(class_ChatMessage, String.class,
+                Class<?> classChatMessage = ReflectionHelper.getNMSClass("ChatMessage");
+                Constructor<?> constructorChatMessage =
+                        ReflectionHelper.getConstructor(classChatMessage, String.class,
                                                         Object[].class);
-                constructor_ChatMessage.setAccessible(true);
-                return constructor_ChatMessage.newInstance(str, new Object[0]);
+                constructorChatMessage.setAccessible(true);
+                return constructorChatMessage.newInstance(str, new Object[0]);
             }
         }
         catch (ReflectiveOperationException e)
@@ -43,13 +43,13 @@ public class ChatComponentHelper
     {
         try
         {
-            Class<?> class_IChatBaseComponent = ReflectionHelper.getNMSClass("IChatBaseComponent");
-            Class<?> class_IChatBaseComponent$ChatSerializer =
+            Class<?> classIChatBaseComponent = ReflectionHelper.getNMSClass("IChatBaseComponent");
+            Class<?> classIChatBaseComponent$ChatSerializer =
                     ReflectionHelper.getNMSClass("IChatBaseComponent$ChatSerializer");
-            Method method_a = ReflectionHelper.getMethod(class_IChatBaseComponent$ChatSerializer, "a",
-                                                         class_IChatBaseComponent);
-            method_a.setAccessible(true);
-            return (String) method_a.invoke(null, chat_component);
+            Method methodA = ReflectionHelper.getMethod(classIChatBaseComponent$ChatSerializer, "a",
+                                                         classIChatBaseComponent);
+            methodA.setAccessible(true);
+            return (String) methodA.invoke(null, chat_component);
         }
         catch (ReflectiveOperationException e)
         {

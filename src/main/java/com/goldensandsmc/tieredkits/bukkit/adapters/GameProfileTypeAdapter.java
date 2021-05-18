@@ -33,16 +33,16 @@ public class GameProfileTypeAdapter extends TypeAdapter
 
             try
             {
-                Field field_id = ReflectionHelper.getField(value.getClass(), "id");
-                field_id.setAccessible(true);
-                Field field_name = ReflectionHelper.getField(value.getClass(), "name");
-                field_name.setAccessible(true);
-                id = (UUID) field_id.get(value);
-                name = (String) field_name.get(value);
+                Field fieldId = ReflectionHelper.getField(value.getClass(), "id");
+                fieldId.setAccessible(true);
+                Field fieldName = ReflectionHelper.getField(value.getClass(), "name");
+                fieldName.setAccessible(true);
+                id = (UUID) fieldId.get(value);
+                name = (String) fieldName.get(value);
             }
-            catch (ReflectiveOperationException var7)
+            catch (ReflectiveOperationException e)
             {
-                var7.printStackTrace();
+                e.printStackTrace();
             }
 
             out.beginObject();
@@ -76,44 +76,16 @@ public class GameProfileTypeAdapter extends TypeAdapter
 
             while (in.hasNext())
             {
-                String var4 = in.nextName().toLowerCase();
-                byte var5 = -1;
-                switch (var4.hashCode())
+                switch (in.nextName())
                 {
-                    case -265713450:
-                        if (var4.equals("username"))
-                        {
-                            var5 = 3;
-                        }
-                        break;
-                    case 3355:
-                        if (var4.equals("id"))
-                        {
-                            var5 = 0;
-                        }
-                        break;
-                    case 3373707:
-                        if (var4.equals("name"))
-                        {
-                            var5 = 2;
-                        }
-                        break;
-                    case 3601339:
-                        if (var4.equals("uuid"))
-                        {
-                            var5 = 1;
-                        }
-                }
-
-                switch (var5)
-                {
-                    case 0:
-                    case 1:
+                    case "id":
+                    case "uuid":
                         id = ItemStackTypeAdapter.GSON.fromJson(in, UUID.class);
                         break;
-                    case 2:
-                    case 3:
+                    case "name":
+                    case "username":
                         name = in.nextString();
+                        break;
                 }
             }
 
@@ -145,13 +117,13 @@ public class GameProfileTypeAdapter extends TypeAdapter
 
                 try
                 {
-                    Constructor<?> constructor_gameprofile = ReflectionHelper
+                    Constructor<?> constructorGameProfile = ReflectionHelper
                             .getConstructor(getGameProfileClass(), UUID.class, String.class);
-                    return constructor_gameprofile.newInstance(id, name);
+                    return constructorGameProfile.newInstance(id, name);
                 }
-                catch (ReflectiveOperationException var6)
+                catch (ReflectiveOperationException e)
                 {
-                    var6.printStackTrace();
+                    e.printStackTrace();
                     return null;
                 }
             }
@@ -164,7 +136,7 @@ public class GameProfileTypeAdapter extends TypeAdapter
         {
             return Class.forName("net.minecraft.util.com.mojang.authlib.GameProfile");
         }
-        catch (ClassNotFoundException var1)
+        catch (ClassNotFoundException e)
         {
             return Class.forName("com.mojang.authlib.GameProfile");
         }

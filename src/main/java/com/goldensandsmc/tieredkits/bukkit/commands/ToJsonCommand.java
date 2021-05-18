@@ -38,7 +38,7 @@ public class ToJsonCommand extends BaseCommand<Player>
 
     public String[] getCommandUsage()
     {
-        return new String[]{"/<command> [meta]"};
+        return new String[]{"/" + getCommandName() + " [meta]"};
     }
 
     public String getCommandPermission()
@@ -53,7 +53,7 @@ public class ToJsonCommand extends BaseCommand<Player>
         {
             if (target == null)
             {
-                throw new CommandException("You are not holding an item");
+                throw new CommandException("You are not holding an item.");
             }
 
             target = ((ItemStack) target).getItemMeta();

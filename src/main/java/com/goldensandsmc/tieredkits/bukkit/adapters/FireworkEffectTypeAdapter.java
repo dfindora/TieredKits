@@ -69,7 +69,7 @@ public class FireworkEffectTypeAdapter extends TypeAdapter<FireworkEffect>
             Type color_list_type = (new TypeToken<LinkedList<Color>>(){}).getType();
             org.bukkit.FireworkEffect.Type fireworkType = org.bukkit.FireworkEffect.Type.BALL;
             List<Color> colors = new LinkedList<>();
-            List<Color> fade_colors = new LinkedList<>();
+            List<Color> fadeColors = new LinkedList<>();
             boolean flicker = false;
             boolean trail = false;
             in.beginObject();
@@ -88,7 +88,7 @@ public class FireworkEffectTypeAdapter extends TypeAdapter<FireworkEffect>
                     case "fade-colors":
                     case "fade_colors":
                     case "fadecolors":
-                        fade_colors = ItemStackTypeAdapter.GSON.fromJson(in, color_list_type);
+                        fadeColors = ItemStackTypeAdapter.GSON.fromJson(in, color_list_type);
                         break;
                     case "flicker":
                         flicker = in.nextBoolean();
@@ -99,7 +99,7 @@ public class FireworkEffectTypeAdapter extends TypeAdapter<FireworkEffect>
                 }
             }
             in.endObject();
-            return FireworkEffect.builder().with(fireworkType).withColor(colors).withFade(fade_colors)
+            return FireworkEffect.builder().with(fireworkType).withColor(colors).withFade(fadeColors)
                                  .flicker(flicker).trail(trail).build();
         }
     }

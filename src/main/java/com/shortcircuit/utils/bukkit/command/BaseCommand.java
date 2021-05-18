@@ -17,7 +17,7 @@ import org.bukkit.command.PluginIdentifiableCommand;
 
 public abstract class BaseCommand<T extends CommandSender> extends Command implements PluginIdentifiableCommand
 {
-    private static final Joiner default_joiner = Joiner.on("\n");
+    private static final Joiner defaultJoiner = Joiner.on("\n");
     private final TieredKits plugin;
 
     protected BaseCommand(TieredKits plugin)
@@ -43,7 +43,7 @@ public abstract class BaseCommand<T extends CommandSender> extends Command imple
         this.setPermission(this.getCommandPermission());
         if (this.getCommandPermissionMessage() != null)
         {
-            this.setPermissionMessage(default_joiner.join(this.getCommandPermissionMessage()));
+            this.setPermissionMessage(defaultJoiner.join(this.getCommandPermissionMessage()));
         }
 
     }
@@ -67,7 +67,7 @@ public abstract class BaseCommand<T extends CommandSender> extends Command imple
 
     public String[] getCommandPermissionMessage()
     {
-        return null;
+        return new String[]{"You do not have permission to use this command."};
     }
 
     private String alternateLines(String[] lines)
@@ -91,13 +91,13 @@ public abstract class BaseCommand<T extends CommandSender> extends Command imple
     {
         if (this.getCommandType() == null)
         {
-            sender.sendMessage(ChatColor.RED + "This command is not applicable to any users");
+            sender.sendMessage(ChatColor.RED + "This command is not applicable to any users.");
         }
 
         if (!this.getCommandType().isSenderApplicable(sender))
         {
             sender.sendMessage(
-                    ChatColor.RED + "This command is " + this.getCommandType().getApplicableSenderName() + "-only");
+                    ChatColor.RED + "This command is " + this.getCommandType().getApplicableSenderName() + "-only.");
             return false;
         }
         else
@@ -170,26 +170,26 @@ public abstract class BaseCommand<T extends CommandSender> extends Command imple
     {
         try
         {
-            Method set_name = Command.class.getDeclaredMethod("setName", String.class);
-            set_name.invoke(this, name);
+            Method setName = Command.class.getDeclaredMethod("setName", String.class);
+            setName.invoke(this, name);
             return true;
         }
-        catch (ReflectiveOperationException var6)
+        catch (ReflectiveOperationException e)
         {
             try
             {
-                Field name_field = Command.class.getDeclaredField("name");
-                Field modifiers_field = Field.class.getDeclaredField("modifiers");
-                modifiers_field.setAccessible(true);
-                modifiers_field.setInt(name_field, modifiers_field.getInt(name_field) & 16);
-                name_field.setAccessible(true);
-                name_field.set(this, name);
+                Field nameField = Command.class.getDeclaredField("name");
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.setInt(nameField, modifiersField.getInt(nameField) & 16);
+                nameField.setAccessible(true);
+                nameField.set(this, name);
                 return true;
             }
-            catch (ReflectiveOperationException var5)
+            catch (ReflectiveOperationException e2)
             {
                 this.plugin.getLogger().warning("Unable to set command name:");
-                this.plugin.getLogger().warning(var5.getClass().getCanonicalName() + ": " + var5.getMessage());
+                this.plugin.getLogger().warning(e2.getClass().getCanonicalName() + ": " + e2.getMessage());
                 return false;
             }
         }

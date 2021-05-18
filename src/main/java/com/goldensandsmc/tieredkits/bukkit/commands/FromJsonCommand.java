@@ -42,7 +42,7 @@ public class FromJsonCommand extends BaseCommand<CommandSender>
 
     public String[] getCommandUsage()
     {
-        return new String[]{"/<command> [player] <json>"};
+        return new String[]{"/" + getCommandName() + " [player] <json>"};
     }
 
     public String getCommandPermission()
@@ -54,22 +54,22 @@ public class FromJsonCommand extends BaseCommand<CommandSender>
     {
         if (args.isEmpty())
         {
-            throw new TooFewArgumentsException();
+            throw new TooFewArgumentsException("Too few arguments. Usage: " + getCommandUsage()[0]);
         }
         else
         {
             Player target = this.getPlugin().getServer().getPlayer(args.remove(0));
             if (target == null)
             {
-                return new String[]{"The specified player is not online"};
+                return new String[]{"The specified player is not online."};
             }
             else
             {
-                String raw_json = Joiner.on(' ').join(args);
+                String rawJson = Joiner.on(' ').join(args);
 
                 try
                 {
-                    ItemStack item = JsonUtils.fromJson(raw_json, ItemStack.class);
+                    ItemStack item = JsonUtils.fromJson(rawJson, ItemStack.class);
 
                     for (ItemStack overflow : target.getPlayer().getInventory().addItem(new ItemStack[]{item})
                                                     .values())
@@ -78,11 +78,11 @@ public class FromJsonCommand extends BaseCommand<CommandSender>
                               .dropItem(target.getPlayer().getLocation().add(0.0D, 0.25D, 0.0D), overflow);
                     }
 
-                    return new String[]{"Successfully converted item"};
+                    return new String[]{"Successfully converted item."};
                 }
-                catch (Exception var9)
+                catch (Exception e)
                 {
-                    throw new CommandException(var9);
+                    throw new CommandException(e);
                 }
             }
         }

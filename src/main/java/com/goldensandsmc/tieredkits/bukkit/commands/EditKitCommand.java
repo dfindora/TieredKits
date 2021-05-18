@@ -48,7 +48,7 @@ public class EditKitCommand extends BaseCommand<Player>
 
     public String[] getCommandUsage()
     {
-        return new String[]{"/<command> <reload|create|remove|edit> <name> [<uses> <cascade:true|false>]"};
+        return new String[]{"/" + getCommandName() + " <reload|create|remove|edit> <name> [<uses> <cascade:true|false>]"};
     }
 
     public String getCommandPermission()
@@ -95,14 +95,14 @@ public class EditKitCommand extends BaseCommand<Player>
                 }
                 else if (!plugin.getKits().containsKey(name))
                 {
-                    throw new InvalidArgumentException("There is no kit with that name");
+                    throw new InvalidArgumentException("There is no kit with that name.");
                 }
                 else
                 {
                     kit = plugin.getKits().get(name);
                     if (args.size() < 2)
                     {
-                        throw new TooFewArgumentsException();
+                        throw new TooFewArgumentsException("Too few arguments. Usage: " + getCommandUsage()[0]);
                     }
                     else
                     {
@@ -121,29 +121,27 @@ public class EditKitCommand extends BaseCommand<Player>
                         LinkedList<ItemStack> items = new LinkedList<>();
                         LinkedList<BonusItem> bonusItems = new LinkedList<>();
 
-                        int i;
-                        ItemStack item;
-                        for (i = 0; i < 9; ++i)
+                        for (int i = 0; i < 9; ++i)
                         {
-                            item = inventory.getItem(i);
+                            ItemStack item = inventory.getItem(i);
                             if (item != null && !item.getType().name().equalsIgnoreCase("air"))
                             {
                                 items.add(item.clone());
                             }
                         }
 
-                        for (i = 27; i < 36; ++i)
+                        for (int i = 27; i < 36; ++i)
                         {
-                            item = inventory.getItem(i);
+                            ItemStack item = inventory.getItem(i);
                             if (item != null && !item.getType().name().equalsIgnoreCase("air"))
                             {
                                 items.add(item.clone());
                             }
                         }
 
-                        for (i = 9; i < 27; ++i)
+                        for (int i = 9; i < 27; ++i)
                         {
-                            item = inventory.getItem(i);
+                            ItemStack item = inventory.getItem(i);
                             if (item != null && !item.getType().name().equalsIgnoreCase("air"))
                             {
                                 bonusItems
@@ -154,19 +152,19 @@ public class EditKitCommand extends BaseCommand<Player>
                         KitTier tier = new KitTier(uses, cascade, items, bonusItems);
                         kit.getTiers().add(tier);
                         plugin.saveKits();
-                        return new String[]{"Added tier"};
+                        return new String[]{"Added tier."};
                     }
                 }
             }
             else if (!plugin.getKits().containsKey(name))
             {
-                throw new InvalidArgumentException("There is no kit with that name");
+                throw new InvalidArgumentException("There is no kit with that name.");
             }
             else
             {
                 plugin.getKits().remove(name);
                 plugin.saveKits();
-                return new String[]{"Removed kit"};
+                return new String[]{"Removed kit."};
             }
         }
     }

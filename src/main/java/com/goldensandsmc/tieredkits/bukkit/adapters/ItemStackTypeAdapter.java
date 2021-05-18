@@ -51,7 +51,7 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
             builder.registerTypeAdapter(ReflectionHelper.getCraftbukkitClass("inventory.CraftItemStack"),
                                         new ItemStackTypeAdapter());
         }
-        catch (Throwable e)
+        catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
 name: TieredKits
 version: 1.0-SNAPSHOT
-author: ShortCircuit908
+authors: [ShortCircuit908, cobra0798]
 main: com.goldensandsmc.tieredkits.bukkit.TieredKits
 description: Kits that level up!
+api-version: 1.12.2
 loadbefore: [Essentials]

@@ -4,25 +4,31 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Kit {
+public class Kit
+{
     private long cooldown;
     private LinkedList<KitTier> tiers;
 
-    public Kit(long cooldown, Collection<KitTier> tiers) {
+    public Kit(long cooldown, Collection<KitTier> tiers)
+    {
         this.cooldown = cooldown;
-        this.tiers = tiers == null ? null : new LinkedList(tiers);
+        this.tiers = tiers == null ? null : new LinkedList<>(tiers);
     }
 
-    public void setCooldownSeconds(long seconds) {
+    public void setCooldownSeconds(long seconds)
+    {
         this.cooldown = seconds;
     }
 
-    public long getCooldownSeconds() {
+    public long getCooldownSeconds()
+    {
         return this.cooldown;
     }
 
-    public LinkedList<KitTier> getTiers() {
-        if (this.tiers == null) {
+    public LinkedList<KitTier> getTiers()
+    {
+        if (this.tiers == null)
+        {
             this.tiers = new LinkedList<>();
         }
 

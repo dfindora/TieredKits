@@ -1,25 +1,31 @@
 package com.goldensandsmc.tieredkits.bukkit.kit;
 
-public class KitUsage {
-    private long total_uses;
-    private long last_used;
+public class KitUsage
+{
+    private long totalUses;
+    private long lastUsed;
 
-    public KitUsage() {
+    public KitUsage()
+    {
     }
 
-    public long getTotalUses() {
-        return this.total_uses;
+    public long getTotalUses()
+    {
+        return this.totalUses;
     }
 
-    public void setTotalUses(long total_uses) {
-        this.total_uses = total_uses;
+    public void setTotalUses(long totalUses)
+    {
+        this.totalUses = totalUses;
     }
 
-    public long getLastUsed() {
-        return this.last_used;
+    public long getLastUsed()
+    {
+        return this.lastUsed;
     }
 
-    public void setLastUsed(long last_used) {
-        this.last_used = last_used;
+    public void setLastUsed(long lastUsed)
+    {
+        this.lastUsed = lastUsed;
     }
 }

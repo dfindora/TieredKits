@@ -13,18 +13,18 @@ public class ItemHelper
 
     public static ItemMeta parseMeta(ItemStack item, String meta) throws Exception
     {
-        Class<?> class_craftitemstack = ReflectionHelper.getCraftbukkitClass("inventory.CraftItemStack");
-        Class<?> class_mojangsonparser = ReflectionHelper.getNMSClass("MojangsonParser");
-        Class<?> class_itemstack = ReflectionHelper.getNMSClass("ItemStack");
-        Class<?> class_nbttagcompound = ReflectionHelper.getNMSClass("NBTTagCompound");
-        Method method_parse = class_mojangsonparser.getDeclaredMethod("parse", String.class);
-        Method method_asnmscopy = class_craftitemstack.getDeclaredMethod("asNMSCopy", ItemStack.class);
-        Method method_asbukkitcopy = class_craftitemstack.getDeclaredMethod("asBukkitCopy", class_itemstack);
-        Method method_settag = class_itemstack.getDeclaredMethod("setTag", class_nbttagcompound);
-        Object nbt_tag = method_parse.invoke(null, meta);
-        Object nms_copy = method_asnmscopy.invoke(null, item);
-        method_settag.invoke(nms_copy, nbt_tag);
-        ItemStack new_item = (ItemStack) method_asbukkitcopy.invoke(null, nms_copy);
-        return new_item.getItemMeta();
+        Class<?> classCraftItemStack = ReflectionHelper.getCraftbukkitClass("inventory.CraftItemStack");
+        Class<?> classMojangsonParser = ReflectionHelper.getNMSClass("MojangsonParser");
+        Class<?> classItemStack = ReflectionHelper.getNMSClass("ItemStack");
+        Class<?> classNBTTagCompound = ReflectionHelper.getNMSClass("NBTTagCompound");
+        Method methodParse = classMojangsonParser.getDeclaredMethod("parse", String.class);
+        Method methodAsNMSCopy = classCraftItemStack.getDeclaredMethod("asNMSCopy", ItemStack.class);
+        Method methodAsBukkitCopy = classCraftItemStack.getDeclaredMethod("asBukkitCopy", classItemStack);
+        Method methodSetTag = classItemStack.getDeclaredMethod("setTag", classNBTTagCompound);
+        Object nbtTag = methodParse.invoke(null, meta);
+        Object nmsCopy = methodAsNMSCopy.invoke(null, item);
+        methodSetTag.invoke(nmsCopy, nbtTag);
+        ItemStack newItem = (ItemStack) methodAsBukkitCopy.invoke(null, nmsCopy);
+        return newItem.getItemMeta();
     }
 }

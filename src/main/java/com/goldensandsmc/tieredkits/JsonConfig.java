@@ -22,21 +22,21 @@ public class JsonConfig
 {
     private final ClassLoader context;
     private final File file;
-    private final String default_path;
+    private final String defaultPath;
     private JsonObject root;
-    private final HashMap<String, Object> value_cache;
+    private final HashMap<String, Object> valueCache;
 
     public JsonConfig(File file)
     {
         this(null, file, null);
     }
 
-    public JsonConfig(Object context, File file, String default_path)
+    public JsonConfig(Object context, File file, String defaultPath)
     {
-        this.value_cache = new HashMap<>();
+        this.valueCache = new HashMap<>();
         this.file = file;
         file.getParentFile().mkdirs();
-        this.default_path = default_path;
+        this.defaultPath = defaultPath;
         this.context = context == null ? null : context.getClass().getClassLoader();
         this.saveDefaultConfig();
         this.loadConfig();
@@ -65,7 +65,7 @@ public class JsonConfig
 
                 scanner.close();
                 data = builder.toString().replaceAll("(/\\*(.*)\\*/)|(//(.*))", "");
-                this.value_cache.clear();
+                this.valueCache.clear();
                 JsonElement element = (new JsonParser()).parse(data);
                 if (element instanceof JsonObject)
                 {
@@ -76,9 +76,9 @@ public class JsonConfig
                     this.root = new JsonObject();
                 }
             }
-            catch (FileNotFoundException var7)
+            catch (FileNotFoundException e)
             {
-                var7.printStackTrace();
+                e.printStackTrace();
             }
 
         }
@@ -96,11 +96,10 @@ public class JsonConfig
                 writer.flush();
                 writer.close();
             }
-            catch (IOException var4)
+            catch (IOException e)
             {
-                var4.printStackTrace();
+                e.printStackTrace();
             }
-
         }
     }
 
@@ -121,9 +120,9 @@ public class JsonConfig
                 try
                 {
                     this.file.createNewFile();
-                    if (this.context != null && this.default_path != null)
+                    if (this.context != null && this.defaultPath != null)
                     {
-                        Files.copy(Objects.requireNonNull(this.context.getResourceAsStream(this.default_path)),
+                        Files.copy(Objects.requireNonNull(this.context.getResourceAsStream(this.defaultPath)),
                                    this.file.toPath(),
                                    StandardCopyOption.REPLACE_EXISTING);
                     }
@@ -132,9 +131,9 @@ public class JsonConfig
                         this.saveConfig();
                     }
                 }
-                catch (IOException var5)
+                catch (IOException e)
                 {
-                    var5.printStackTrace();
+                    e.printStackTrace();
                 }
 
             }
@@ -159,7 +158,7 @@ public class JsonConfig
             }
 
             cur_path.add(nodes[nodes.length - 1], JsonUtils.getGson().toJsonTree(value));
-            this.value_cache.put(path, value);
+            this.valueCache.put(path, value);
         }
     }
 
@@ -167,9 +166,9 @@ public class JsonConfig
     {
         synchronized (this)
         {
-            if (this.value_cache.containsKey(path))
+            if (this.valueCache.containsKey(path))
             {
-                Object value = this.value_cache.get(path);
+                Object value = this.valueCache.get(path);
                 if (value == null || TypeUtils.isAssignable(value.getClass(), type))
                 {
                     return (T) value;
@@ -185,7 +184,7 @@ public class JsonConfig
                 {
                     if (default_if_null == null)
                     {
-                        this.value_cache.put(path, null);
+                        this.valueCache.put(path, null);
                         return null;
                     }
 
@@ -204,7 +203,7 @@ public class JsonConfig
             T value = raw_value != null && !(raw_value instanceof JsonNull) ? JsonUtils.getGson()
                                                                                        .fromJson(raw_value, type)
                                                                             : default_if_null;
-            this.value_cache.put(path, value);
+            this.valueCache.put(path, value);
             return value;
         }
     }

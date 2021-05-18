@@ -47,7 +47,7 @@ public class PreviewKitCommand extends BaseCommand<Player>
 
     public String[] getCommandUsage()
     {
-        return new String[]{"/<command> <kit> [uses]"};
+        return new String[]{"/" + getCommandName() + " <kit> [uses]"};
     }
 
     public String getCommandPermission()
@@ -59,15 +59,15 @@ public class PreviewKitCommand extends BaseCommand<Player>
     {
         if (args.isEmpty())
         {
-            throw new TooFewArgumentsException();
+            throw new TooFewArgumentsException("Too few arguments. Usage: " + getCommandUsage()[0]);
         }
         else
         {
             String name = args.remove(0).toLowerCase();
-            Kit kit = ((TieredKits) this.getPlugin()).getKits().get(name);
+            Kit kit = this.getPlugin().getKits().get(name);
             if (kit == null)
             {
-                throw new InvalidArgumentException("There is no kit with that name");
+                throw new InvalidArgumentException("There is no kit with that name.");
             }
             else
             {
@@ -85,7 +85,7 @@ public class PreviewKitCommand extends BaseCommand<Player>
                         usage.setTotalUses(uses);
                         tiers.addAll(Utils.getApplicableTiers(kit, usage));
                     }
-                    catch (NumberFormatException var9)
+                    catch (NumberFormatException e)
                     {
                         throw new InvalidArgumentException("Invalid number: " + args.get(0));
                     }

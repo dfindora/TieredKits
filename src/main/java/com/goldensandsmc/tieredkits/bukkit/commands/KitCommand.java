@@ -53,7 +53,7 @@ public class KitCommand extends BaseCommand<Player>
 
     public String getCommandPermission()
     {
-        return "essentials.kit";
+        return "essentials.kits";
     }
 
     public String[] exec(Player sender, String command, ConcurrentArrayList<String> args) throws CommandException

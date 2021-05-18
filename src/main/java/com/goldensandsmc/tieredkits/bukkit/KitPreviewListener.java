@@ -77,7 +77,7 @@ public class KitPreviewListener implements Listener
                     item = item.clone();
                     ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getServer().getItemFactory()
                                                                                     .getItemMeta(item.getType());
-                    meta.setLore(ImmutableList.of("Available after " + tier.getAvailableAfter() + " uses",
+                    meta.setLore(ImmutableList.of("Available after " + tier.getUsesRequired() + " uses",
                                                   "This item is always given",
                                                   "This tier does" + (tier.doesCascade() ? "" : " not") + " cascade"));
                     item.setItemMeta(meta);
@@ -100,7 +100,7 @@ public class KitPreviewListener implements Listener
                         ItemStack clone = item.clone();
                         ItemMeta meta = clone.hasItemMeta() ? clone.getItemMeta() : Bukkit.getServer().getItemFactory()
                                                                                           .getItemMeta(clone.getType());
-                        meta.setLore(ImmutableList.of("Available after " + tier.getAvailableAfter() + " uses",
+                        meta.setLore(ImmutableList.of("Available after " + tier.getUsesRequired() + " uses",
                                                       bonus.getProbability() * 100.0D + "% chance",
                                                       "This tier does" + (tier.doesCascade() ? "" : " not")
                                                       + " cascade"));

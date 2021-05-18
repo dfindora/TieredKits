@@ -14,7 +14,6 @@ import com.shortcircuit.utils.collect.ConcurrentArrayList;
 
 import java.util.LinkedList;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;

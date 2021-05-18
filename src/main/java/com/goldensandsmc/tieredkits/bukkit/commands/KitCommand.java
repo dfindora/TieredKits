@@ -138,6 +138,7 @@ public class KitCommand extends BaseCommand<Player>
             usage = kitUsage.get(kitName);
         }
 
+        KitTier maxTier = Utils.getMaxTier(kit, usage);
         List<KitTier> applicableTiers = Utils.getApplicableTiers(kit, usage);
         LinkedList<ItemStack> allItems = new LinkedList<>();
 
@@ -166,11 +167,11 @@ public class KitCommand extends BaseCommand<Player>
             target.getWorld().dropItem(target.getLocation().add(0.0, 0.25, 0.0), overflow);
         }
 
-        int prevTiers = applicableTiers.size();
+        int prevTier = maxTier.getUsesRequired();
         usage.setTotalUses(usage.getTotalUses() + 1L);
         usage.setLastUsed(now);
-        int newTiers = Utils.getApplicableTiers(kit, usage).size();
-        if (newTiers > prevTiers)
+        int newTier = Utils.getMaxTier(kit, usage).getUsesRequired();
+        if (prevTier < newTier)
         {
             sender.sendMessage(
                     ChatColor.AQUA + "Congratulations! Your " + ChatColor.GOLD + kitName + ChatColor.AQUA

@@ -91,21 +91,31 @@ public class Utils
         return null;
     }
 
+    public static KitTier getMaxTier(Kit kit, KitUsage usage)
+    {
+        KitTier maxTier = new KitTier(0, false, null, null);
+        for (KitTier tier : kit.getTiers())
+        {
+            boolean canUse = usage.getTotalUses() >= tier.getUsesRequired();
+            boolean isHigherTier = tier.getUsesRequired() > maxTier.getUsesRequired();
+            if (canUse && isHigherTier)
+            {
+                maxTier = tier;
+            }
+        }
+        return maxTier;
+    }
+
     public static List<KitTier> getApplicableTiers(Kit kit, KitUsage usage)
     {
         LinkedList<KitTier> applicableTiers = new LinkedList<>();
-        KitTier maxTier = new KitTier(0, false, null, null);
+        KitTier maxTier = getMaxTier(kit, usage);
         LinkedList<KitTier> tiers = kit.getTiers();
 
         for(KitTier tier : tiers)
         {
-            if ((long) tier.getAvailableAfter() <= usage.getTotalUses() && maxTier.getAvailableAfter() <= tier
-                    .getAvailableAfter())
-            {
-                maxTier = tier;
-            }
-            if ((tier.getAvailableAfter() >= maxTier.getAvailableAfter() || !tier.doesCascade())
-                && tier.getAvailableAfter() != maxTier.getAvailableAfter())
+            if ((tier.getUsesRequired() < maxTier.getUsesRequired() && tier.doesCascade())
+                || tier.getUsesRequired() == maxTier.getUsesRequired())
             {
                 applicableTiers.add(tier);
             }

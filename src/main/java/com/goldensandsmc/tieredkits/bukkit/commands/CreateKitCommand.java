@@ -45,7 +45,7 @@ public class CreateKitCommand extends BaseCommand<CommandSender>
     @Override
     public String[] getCommandUsage()
     {
-        return new String[]{"/" + getCommandName() + " <name>"};
+        return new String[]{"/" + getCommandName() + " <name> [<cooldownSeconds>]"};
     }
 
     @Override
@@ -59,9 +59,24 @@ public class CreateKitCommand extends BaseCommand<CommandSender>
             throws CommandException
     {
         TieredKits plugin = this.getPlugin();
-        if (args.size() == 1)
+        if (args.size() > 0)
         {
             String name = args.remove(0).toLowerCase();
+
+
+            long cooldownSeconds = 0;
+            if (args.size() > 1)
+            {
+                try
+                {
+                    cooldownSeconds = Long.parseLong(args.get(2));
+                }
+                catch (NumberFormatException e)
+                {
+                    throw new InvalidArgumentException("unable to parse cooldown: " + args.get(2));
+                }
+            }
+
             Kit kit;
             if (plugin.getKits().containsKey(name))
             {
@@ -69,7 +84,7 @@ public class CreateKitCommand extends BaseCommand<CommandSender>
             }
             else
             {
-                kit = new Kit(0L, null);
+                kit = new Kit(cooldownSeconds, null);
                 plugin.getKits().put(name, kit);
                 plugin.saveKits();
                 return new String[]{"Created an empty kit. Use " + ChatColor.GOLD + "/editkit " + name

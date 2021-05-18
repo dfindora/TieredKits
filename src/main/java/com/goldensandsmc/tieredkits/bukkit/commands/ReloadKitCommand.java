@@ -47,7 +47,7 @@ public class ReloadKitCommand extends BaseCommand<CommandSender>
     @Override
     public String getCommandPermission()
     {
-        return "essentials.kits.reload";
+        return "essentials.kit.reload";
     }
 
     @Override

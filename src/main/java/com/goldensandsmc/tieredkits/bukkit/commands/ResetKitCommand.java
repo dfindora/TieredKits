@@ -132,7 +132,7 @@ public class ResetKitCommand extends BaseCommand<CommandSender>
             default:
                 throw new InvalidArgumentException("invalid type. Expected <reset|usage|lastused>");
         }
-        HashMap<String, KitUsage> map = new HashMap<>();
+        HashMap<String, KitUsage> map = this.getPlugin().getKitUsage().get(uuid);
         map.put(kitName, kitUsage);
         this.getPlugin().getKitUsage().put(uuid, map);
         this.getPlugin().saveUsages();

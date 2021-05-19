@@ -40,13 +40,12 @@ public class GoodnessGracious
     public static <T extends ConfigurationSerializable> T fromJson(JsonElement serialized, Class<T> clazz) throws
             ReflectiveOperationException
     {
-        Type type = (new TypeToken<HashMap<String, Object>>()
-        {
-        }).getType();
+        Type type = (new TypeToken<HashMap<String, Object>>(){}).getType();
         HashMap<String, Object> map = JsonUtils.fromJson(serialized, type);
         return fromJson(map, clazz);
     }
 
+    @SuppressWarnings({"unchecked","rawtypes"})
     public static <T extends ConfigurationSerializable> T fromJson(Map<String, Object> serialized, Class<T> clazz) throws
             ReflectiveOperationException
     {
@@ -64,20 +63,20 @@ public class GoodnessGracious
             }
         }
 
-        Method method_deserialize;
+        Method methodDeserialize;
         try
         {
-            method_deserialize = clazz.getDeclaredMethod("valueOf", Map.class);
-            method_deserialize.setAccessible(true);
-            return (T) method_deserialize.invoke((Object) null, serialized);
+            methodDeserialize = clazz.getDeclaredMethod("valueOf", Map.class);
+            methodDeserialize.setAccessible(true);
+            return (T) methodDeserialize.invoke(null, serialized);
         }
         catch (NoSuchMethodException noSuchMethodException)
         {
             try
             {
-                method_deserialize = clazz.getDeclaredMethod("deserialize", Map.class);
-                method_deserialize.setAccessible(true);
-                return (T) method_deserialize.invoke((Object) null, serialized);
+                methodDeserialize = clazz.getDeclaredMethod("deserialize", Map.class);
+                methodDeserialize.setAccessible(true);
+                return (T) methodDeserialize.invoke(null, serialized);
             }
             catch (NoSuchMethodException noSuchMethodException1)
             {
@@ -85,7 +84,7 @@ public class GoodnessGracious
                 {
                     Constructor<T> ctor = clazz.getDeclaredConstructor(Map.class);
                     ctor.setAccessible(true);
-                    return (T) ctor.newInstance(serialized);
+                    return ctor.newInstance(serialized);
                 }
                 catch (NoSuchMethodException noSuchMethodException2)
                 {

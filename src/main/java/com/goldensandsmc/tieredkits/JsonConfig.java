@@ -1,9 +1,6 @@
 package com.goldensandsmc.tieredkits;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +28,7 @@ public class JsonConfig
         this(null, file, null);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public JsonConfig(Object context, File file, String defaultPath)
     {
         this.valueCache = new HashMap<>();
@@ -42,7 +40,7 @@ public class JsonConfig
         this.loadConfig();
     }
 
-    public synchronized void loadConfig()
+    public synchronized void loadConfig() throws JsonSyntaxException
     {
         synchronized (this)
         {
@@ -76,14 +74,15 @@ public class JsonConfig
                     this.root = new JsonObject();
                 }
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException fileNotFoundException)
             {
-                e.printStackTrace();
+                fileNotFoundException.printStackTrace();
             }
 
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public synchronized void saveConfig()
     {
         synchronized (this)
@@ -111,6 +110,7 @@ public class JsonConfig
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public synchronized void saveDefaultConfig(boolean overwrite)
     {
         synchronized (this)
@@ -144,25 +144,25 @@ public class JsonConfig
     {
         synchronized (this)
         {
-            JsonObject cur_path = this.root;
+            JsonObject curPath = this.root;
             String[] nodes = path.split("\\.");
 
             for (int i = 0; i < nodes.length - 1; ++i)
             {
-                if (!cur_path.has(nodes[i]))
+                if (!curPath.has(nodes[i]))
                 {
-                    cur_path.add(nodes[i], new JsonObject());
+                    curPath.add(nodes[i], new JsonObject());
                 }
 
-                cur_path = cur_path.getAsJsonObject(nodes[i]);
+                curPath = curPath.getAsJsonObject(nodes[i]);
             }
 
-            cur_path.add(nodes[nodes.length - 1], JsonUtils.getGson().toJsonTree(value));
+            curPath.add(nodes[nodes.length - 1], JsonUtils.getGson().toJsonTree(value));
             this.valueCache.put(path, value);
         }
     }
 
-    public <T> T getNode(String path, Type type, T default_if_null)
+    public <T> T getNode(String path, Type type, T defaultIfNull)
     {
         synchronized (this)
         {
@@ -171,45 +171,47 @@ public class JsonConfig
                 Object value = this.valueCache.get(path);
                 if (value == null || TypeUtils.isAssignable(value.getClass(), type))
                 {
-                    return (T) value;
+                    @SuppressWarnings("unchecked") T result = (T) value;
+                    return result;
                 }
             }
 
-            JsonObject cur_path = this.root;
+            JsonObject curPath = this.root;
             String[] nodes = path.split("\\.");
 
             for (int i = 0; i < nodes.length - 1; ++i)
             {
-                if (!cur_path.has(nodes[i]))
+                if (!curPath.has(nodes[i]))
                 {
-                    if (default_if_null == null)
+                    if (defaultIfNull == null)
                     {
                         this.valueCache.put(path, null);
                         return null;
                     }
 
-                    cur_path.add(nodes[i], new JsonObject());
+                    curPath.add(nodes[i], new JsonObject());
                 }
 
-                cur_path = cur_path.getAsJsonObject(nodes[i]);
+                curPath = curPath.getAsJsonObject(nodes[i]);
             }
 
-            if (!cur_path.has(nodes[nodes.length - 1]) && default_if_null != null)
+            if (!curPath.has(nodes[nodes.length - 1]) && defaultIfNull != null)
             {
-                cur_path.add(nodes[nodes.length - 1], JsonUtils.getGson().toJsonTree(default_if_null, type));
+                curPath.add(nodes[nodes.length - 1], JsonUtils.getGson().toJsonTree(defaultIfNull, type));
             }
 
-            JsonElement raw_value = cur_path.get(nodes[nodes.length - 1]);
-            T value = raw_value != null && !(raw_value instanceof JsonNull) ? JsonUtils.getGson()
-                                                                                       .fromJson(raw_value, type)
-                                                                            : default_if_null;
+            JsonElement rawValue = curPath.get(nodes[nodes.length - 1]);
+            T value = rawValue != null && !(rawValue instanceof JsonNull) ? JsonUtils.getGson()
+                                                                                       .fromJson(rawValue, type)
+                                                                            : defaultIfNull;
             this.valueCache.put(path, value);
             return value;
         }
     }
 
-    public <T> T getNode(String node, Class<T> type, T default_if_null)
+    @SuppressWarnings("unused")
+    public <T> T getNode(String node, Class<T> type, T defaultIfNull)
     {
-        return this.getNode(node, (Type) type, default_if_null);
+        return this.getNode(node, (Type) type, defaultIfNull);
     }
 }

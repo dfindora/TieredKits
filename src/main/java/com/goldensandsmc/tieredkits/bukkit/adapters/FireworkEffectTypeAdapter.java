@@ -28,19 +28,19 @@ public class FireworkEffectTypeAdapter extends TypeAdapter<FireworkEffect>
         }
         else
         {
-            Type color_list_type = (new TypeToken<List<Color>>(){}).getType();
+            Type colorListType = (new TypeToken<List<Color>>(){}).getType();
             out.beginObject();
             out.name("type").value(value.getType().name());
             if (value.getColors() != null && !value.getColors().isEmpty())
             {
                 out.name("colors");
-                ItemStackTypeAdapter.GSON.toJson(value.getColors(), color_list_type, out);
+                ItemStackTypeAdapter.GSON.toJson(value.getColors(), colorListType, out);
             }
 
             if (value.getFadeColors() != null && !value.getFadeColors().isEmpty())
             {
                 out.name("fadeColors");
-                ItemStackTypeAdapter.GSON.toJson(value.getColors(), color_list_type, out);
+                ItemStackTypeAdapter.GSON.toJson(value.getColors(), colorListType, out);
             }
 
             if (value.hasFlicker())
@@ -66,7 +66,7 @@ public class FireworkEffectTypeAdapter extends TypeAdapter<FireworkEffect>
         }
         else
         {
-            Type color_list_type = (new TypeToken<LinkedList<Color>>(){}).getType();
+            Type colorListType = (new TypeToken<LinkedList<Color>>(){}).getType();
             org.bukkit.FireworkEffect.Type fireworkType = org.bukkit.FireworkEffect.Type.BALL;
             List<Color> colors = new LinkedList<>();
             List<Color> fadeColors = new LinkedList<>();
@@ -83,12 +83,12 @@ public class FireworkEffectTypeAdapter extends TypeAdapter<FireworkEffect>
                         fireworkType = org.bukkit.FireworkEffect.Type.valueOf(in.nextString().toUpperCase());
                         break;
                     case "colors":
-                        colors = ItemStackTypeAdapter.GSON.fromJson(in, color_list_type);
+                        colors = ItemStackTypeAdapter.GSON.fromJson(in, colorListType);
                         break;
                     case "fade-colors":
                     case "fade_colors":
                     case "fadecolors":
-                        fadeColors = ItemStackTypeAdapter.GSON.fromJson(in, color_list_type);
+                        fadeColors = ItemStackTypeAdapter.GSON.fromJson(in, colorListType);
                         break;
                     case "flicker":
                         flicker = in.nextBoolean();

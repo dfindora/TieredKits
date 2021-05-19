@@ -26,7 +26,7 @@ public class ReflectionHelper
 
     public static Class<?> getNMSClass(String name) throws ClassNotFoundException
     {
-        return Class.forName(NMS_PACKAGE.getName() + "." + name);
+        return Class.forName("net.minecraft.server.v1_12_R1" + "." + name);
     }
 
     public static Field getField(Class<?> clazz, String name) throws NoSuchFieldException
@@ -35,7 +35,7 @@ public class ReflectionHelper
         {
             return clazz.getDeclaredField(name);
         }
-        catch (NoSuchFieldException var3)
+        catch (NoSuchFieldException e)
         {
             if (clazz.getSuperclass() != null)
             {
@@ -68,10 +68,10 @@ public class ReflectionHelper
         }
     }
 
-    public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... parameter_types) throws
+    public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... parameterTypes) throws
             NoSuchMethodException
     {
-        return clazz.getDeclaredConstructor(parameter_types);
+        return clazz.getDeclaredConstructor(parameterTypes);
     }
 
     public static Field[] getAllFields(Class<?> clazz)

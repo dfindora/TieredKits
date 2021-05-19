@@ -7,6 +7,8 @@ import com.shortcircuit.utils.bukkit.command.exceptions.CommandException;
 import com.shortcircuit.utils.collect.ConcurrentArrayList;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+
 public class ReloadKitCommand extends BaseCommand<CommandSender>
 {
     public ReloadKitCommand(TieredKits plugin)
@@ -54,7 +56,32 @@ public class ReloadKitCommand extends BaseCommand<CommandSender>
     public String[] exec(CommandSender sender, String command, ConcurrentArrayList<String> list)
             throws CommandException
     {
-        this.getPlugin().loadKits();
-        return new String[]{"Kits reloaded from file"};
+        boolean kitsLoaded = this.getPlugin().loadKits();
+        boolean usagesNull = this.getPlugin().getKitUsage() == null || this.getPlugin().getKitUsage().isEmpty();
+
+        ArrayList<String> messages = new ArrayList<>();
+        if (kitsLoaded)
+        {
+            messages.add("Kits reloaded from file.");
+        }
+        else
+        {
+            throw new CommandException("Kit reload failed. Check logs.");
+        }
+
+        if(usagesNull)
+        {
+            boolean usagesLoaded = this.getPlugin().loadUsages();
+            if(usagesLoaded)
+            {
+                messages.add("Usages were empty, so they were reloaded as a precaution.");
+            }
+            else
+            {
+                throw new CommandException("Attempted to reload usages, but it failed. Check logs.");
+            }
+        }
+
+        return messages.toArray(new String[0]);
     }
 }

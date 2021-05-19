@@ -136,7 +136,14 @@ public class ResetKitCommand extends BaseCommand<CommandSender>
         map.put(kitName, kitUsage);
         this.getPlugin().getKitUsage().put(uuid, map);
         this.getPlugin().saveUsages();
-        this.getPlugin().loadUsages();
-        return new String[]{"User " + player.getName() + " kits updated."};
+        boolean loaded = this.getPlugin().loadUsages();
+        if (loaded)
+        {
+            return new String[]{"User " + player.getName() + " kits updated."};
+        }
+        else
+        {
+            throw new CommandException("Usage update failed. Check logs.");
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.goldensandsmc.tieredkits.bukkit.commands.*;
 import com.goldensandsmc.tieredkits.bukkit.kit.Kit;
 import com.goldensandsmc.tieredkits.bukkit.kit.KitUsage;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.shortcircuit.utils.bukkit.command.CommandRegister;
 
@@ -23,16 +24,32 @@ public class TieredKits extends JavaPlugin
 {
     private final HashMap<String, Kit> kits = new HashMap<>();
     private final HashMap<UUID, HashMap<String, KitUsage>> kitUsage = new HashMap<>();
-    private final JsonConfig kitsConfig;
-    private final JsonConfig usageConfig;
+    private JsonConfig kitsConfig;
+    private JsonConfig usageConfig;
 
     public TieredKits()
     {
-        this.kitsConfig =
-                new JsonConfig(this, new File(this.getDataFolder() + File.separator + "kits.json"), "kits.json");
-        this.usageConfig = new JsonConfig(new File(this.getDataFolder() + File.separator + "usage.json"));
-        this.kitsConfig.loadConfig();
-        this.usageConfig.loadConfig();
+        try
+        {
+            this.kitsConfig = new JsonConfig(this, new File(this.getDataFolder() + File.separator
+                                                            + "kits.json"), "kits.json");
+            this.kitsConfig.loadConfig();
+        }
+        catch (JsonSyntaxException e)
+        {
+            getLogger().warning("Kits were unable to load. There was an error in the config file. ");
+            getLogger().warning(e.getMessage());
+        }
+        try
+        {
+            this.usageConfig = new JsonConfig(new File(this.getDataFolder() + File.separator + "usage.json"));
+            this.usageConfig.loadConfig();
+        }
+        catch (JsonSyntaxException e)
+        {
+            getLogger().warning("Usages were unable to load. There was an error in the config file. ");
+            getLogger().warning(e.getMessage());
+        }
     }
 
     public void onEnable()
@@ -85,13 +102,29 @@ public class TieredKits extends JavaPlugin
         return this.kits;
     }
 
-    public void loadUsages()
+    public boolean loadUsages()
     {
-        this.usageConfig.loadConfig();
-        Type type = (new TypeToken<HashMap<UUID, HashMap<String, KitUsage>>>(){}).getType();
-        HashMap<UUID, HashMap<String, KitUsage>> newUsages = this.usageConfig.getNode("usage", type, new HashMap<>());
-        this.kitUsage.clear();
-        this.kitUsage.putAll(newUsages);
+        try
+        {
+            if(usageConfig == null)
+            {
+                usageConfig = new JsonConfig(this, new File(this.getDataFolder() + File.separator
+                                                                + "usage.json"), "usage.json");
+            }
+            this.usageConfig.loadConfig();
+            Type type = (new TypeToken<HashMap<UUID, HashMap<String, KitUsage>>>(){}).getType();
+            HashMap<UUID, HashMap<String, KitUsage>> newUsages = this.usageConfig.getNode("usage", type,
+                                                                                          new HashMap<>());
+            this.kitUsage.clear();
+            this.kitUsage.putAll(newUsages);
+            return true;
+        }
+        catch (JsonSyntaxException e)
+        {
+            getLogger().warning("Usages were unable to load. There was an error in the config file. ");
+            getLogger().warning(e.getMessage());
+            return false;
+        }
     }
 
     public void saveUsages()
@@ -100,13 +133,28 @@ public class TieredKits extends JavaPlugin
         this.usageConfig.saveConfig();
     }
 
-    public void loadKits()
+    public boolean loadKits()
     {
-        this.kitsConfig.loadConfig();
-        Type type = (new TypeToken<HashMap<String, Kit>>(){}).getType();
-        HashMap<String, Kit> newKits = this.kitsConfig.getNode("kits", type, new HashMap<>());
-        this.kits.clear();
-        this.kits.putAll(newKits);
+        try
+        {
+            if(kitsConfig == null)
+            {
+                kitsConfig = new JsonConfig(this, new File(this.getDataFolder() + File.separator
+                                              + "kits.json"), "kits.json");
+            }
+            this.kitsConfig.loadConfig();
+            Type type = (new TypeToken<HashMap<String, Kit>>(){}).getType();
+            HashMap<String, Kit> newKits = this.kitsConfig.getNode("kits", type, new HashMap<>());
+            this.kits.clear();
+            this.kits.putAll(newKits);
+            return true;
+        }
+        catch (JsonSyntaxException e)
+        {
+            getLogger().warning("Kits were unable to load. There was an error in the config file. ");
+            getLogger().warning(e.getMessage());
+            return false;
+        }
     }
 
     public void saveKits()

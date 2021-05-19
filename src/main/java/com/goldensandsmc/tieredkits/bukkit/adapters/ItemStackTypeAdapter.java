@@ -15,10 +15,12 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Map.Entry;
 
+import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftMetaBook;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -56,10 +58,22 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
             e.printStackTrace();
         }
 
+        try
+        {
+            builder.registerTypeAdapter(ReflectionHelper.getCraftbukkitClass("inventory.CraftMetaBookSigned"),
+                                        new CraftMetaBookTypeAdapter());
+        }
+        catch (ReflectiveOperationException e)
+        {
+            e.printStackTrace();
+        }
+
         builder.registerTypeAdapter(Color.class, new ColorTypeAdapter());
         builder.registerTypeAdapter(Enchantment.class, new EnchantmentTypeAdapter());
         builder.registerTypeAdapter(FireworkEffect.class, new FireworkEffectTypeAdapter());
         builder.registerTypeAdapter(ItemStack.class, new ItemStackTypeAdapter());
+        builder.registerTypeAdapter(CraftMetaBook.class, new CraftMetaBookTypeAdapter());
+        builder.registerTypeAdapter(IChatBaseComponent.class, new IChatBaseComponentTypeAdapter());
         return builder;
     }
 
@@ -79,13 +93,23 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
             {
                 ItemMeta meta = value.getItemMeta();
                 out.name("meta");
-                GSON.toJson(meta, meta.getClass(), out);
+                if (meta != null)
+                {
+                    System.out.println("class = " + meta.getClass());
+                    System.out.println("name = " + meta.getDisplayName());
+                    GSON.toJson(meta, meta.getClass(), out);
+                }
+                else
+                {
+                    System.out.println("meta was null.");
+                }
             }
 
             out.endObject();
         }
     }
 
+    @SuppressWarnings("deprecation")
     public ItemStack read(JsonReader in) throws IOException
     {
         if (in.peek() == JsonToken.NULL)
@@ -96,132 +120,70 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
         else
         {
             Material type = null;
+            String typeName = "";
             int amount = 0;
             short durability = 0;
-            JsonElement raw_meta = null;
+            JsonElement rawMeta = null;
             in.beginObject();
-
-            while (true)
+            while (in.hasNext())
             {
-                label74:
-                while (in.hasNext())
+                switch (in.nextName())
                 {
-                    String var6 = in.nextName();
-                    byte var7 = -1;
-                    switch (var6.hashCode())
-                    {
-                        case -1413853096:
-                            if (var6.equals("amount"))
+                    case "id":
+                        int id = in.nextInt();
+                        typeName = id + "";
+                        for (Material material : Material.values())
+                        {
+                            if (material.getId() == id)
                             {
-                                var7 = 6;
+                                type = material;
+                                break;
                             }
-                            break;
-                        case -1339126929:
-                            if (var6.equals("damage"))
-                            {
-                                var7 = 3;
-                            }
-                            break;
-                        case -450004177:
-                            if (var6.equals("metadata"))
-                            {
-                                var7 = 8;
-                            }
-                            break;
-                        case 3355:
-                            if (var6.equals("id"))
-                            {
-                                var7 = 0;
-                            }
-                            break;
-                        case 3076010:
-                            if (var6.equals("data"))
-                            {
-                                var7 = 2;
-                            }
-                            break;
-                        case 3347973:
-                            if (var6.equals("meta"))
-                            {
-                                var7 = 7;
-                            }
-                            break;
-                        case 3575610:
-                            if (var6.equals("type"))
-                            {
-                                var7 = 1;
-                            }
-                            break;
-                        case 94851343:
-                            if (var6.equals("count"))
-                            {
-                                var7 = 5;
-                            }
-                            break;
-                        case 716086281:
-                            if (var6.equals("durability"))
-                            {
-                                var7 = 4;
-                            }
-                    }
-
-                    switch (var7)
-                    {
-                        case 0:
-                            int id = in.nextInt();
-                            Material[] var9 = Material.values();
-                            int var10 = var9.length;
-                            int var11 = 0;
-
-                            while (true)
-                            {
-                                if (var11 >= var10)
-                                {
-                                    continue label74;
-                                }
-
-                                Material material = var9[var11];
-                                if (material.getId() == id)
-                                {
-                                    type = material;
-                                    continue label74;
-                                }
-
-                                ++var11;
-                            }
-                        case 1:
-                            try
-                            {
-                                type = Material.valueOf(in.nextString());
-                            }
-                            catch (IllegalArgumentException e)
-                            {
-                                e.printStackTrace();
-                            }
-                            break;
-                        case 2:
-                        case 3:
-                        case 4:
-                            durability = (short) in.nextInt();
-                            break;
-                        case 5:
-                        case 6:
-                            amount = in.nextInt();
-                            break;
-                        case 7:
-                        case 8:
-                            raw_meta = GSON.fromJson(in, JsonElement.class);
-                    }
+                        }
+                    case "type":
+                        try
+                        {
+                            typeName = in.nextString();
+                            type = Material.valueOf(typeName);
+                        }
+                        catch (IllegalArgumentException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "data":
+                    case "durability":
+                    case "damage":
+                        durability = (short) in.nextInt();
+                        break;
+                    case "count":
+                    case "amount":
+                        amount = in.nextInt();
+                        break;
+                    case "meta":
+                    case "metadata":
+                        rawMeta = GSON.fromJson(in, JsonElement.class);
+                        break;
                 }
 
-                in.endObject();
+            }
+
+            in.endObject();
+            if (type != null)
+            {
                 ItemStack item = new ItemStack(type, amount, durability);
-                item.setItemMeta(deserializeMeta(raw_meta, type));
+                item.setItemMeta(deserializeMeta(rawMeta, type));
                 return item;
+            }
+            else
+            {
+                System.out.println("Unable to find Material for " + typeName);
+                return null;
             }
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends ItemMeta> T deserializeMeta(JsonElement element, Material type)
     {
         if (element instanceof JsonObject)
@@ -231,15 +193,15 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
                 type = Material.STONE;
             }
 
-            ItemMeta dummy_meta = Bukkit.getItemFactory().getItemMeta(type);
+            ItemMeta itemMeta = Bukkit.getItemFactory().getItemMeta(type);
 
             for(Entry<String, JsonElement> entry : ((JsonObject) element).entrySet())
             {
                 try
                 {
-                    Field field = ReflectionHelper.getField(dummy_meta.getClass(), entry.getKey());
+                    Field field = ReflectionHelper.getField(itemMeta.getClass(), entry.getKey());
                     field.setAccessible(true);
-                    field.set(dummy_meta, GSON.fromJson(entry.getValue(), field.getGenericType()));
+                    field.set(itemMeta, GSON.fromJson(entry.getValue(), field.getGenericType()));
                 }
                 catch (ReflectiveOperationException noSuchFieldException)
                 {
@@ -247,7 +209,7 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
                 }
             }
 
-            return (T)dummy_meta;
+            return (T)itemMeta;
         }
         else
         {
@@ -255,6 +217,7 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
         }
     }
 
+    @SuppressWarnings("unused")
     public static JsonElement serializeMeta(ItemMeta meta)
     {
         return meta == null ? JsonNull.INSTANCE : GSON.toJsonTree(meta, meta.getClass());

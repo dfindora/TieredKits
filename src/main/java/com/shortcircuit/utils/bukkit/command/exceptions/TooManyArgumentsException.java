@@ -4,11 +4,11 @@ public class TooManyArgumentsException extends CommandException
 {
     public TooManyArgumentsException()
     {
-        super("Too many arguments");
+        super("Too many arguments.");
     }
 
     public TooManyArgumentsException(String message)
     {
-        super(message);
+        super("Too many arguments. Usage: " + message);
     }
 }

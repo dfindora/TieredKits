@@ -1,18 +1,23 @@
 package com.shortcircuit.utils.bukkit.command.exceptions;
 
-public class NoPermissionException extends CommandException {
-    private final String required_permissions;
+public class NoPermissionException extends CommandException
+{
+    private final String requiredPermissions;
 
-    public NoPermissionException() {
-        this((String)null);
+    public NoPermissionException()
+    {
+        this(null);
     }
 
-    public NoPermissionException(String required_permissions) {
-        super("I'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe this is in error.");
-        this.required_permissions = required_permissions;
+    public NoPermissionException(String requiredPermissions)
+    {
+        super("I'm sorry, but you do not have permission to perform this command. "
+              + "Please contact the server administrators if you believe this is in error.");
+        this.requiredPermissions = requiredPermissions;
     }
 
-    public String getRequiredPermissions() {
-        return this.required_permissions;
+    public String getRequiredPermissions()
+    {
+        return this.requiredPermissions;
     }
 }

@@ -1,18 +1,23 @@
 package com.shortcircuit.utils.bukkit.command.exceptions;
 
-public class CommandException extends Exception {
-    public CommandException() {
+public class CommandException extends Exception
+{
+    public CommandException()
+    {
     }
 
-    public CommandException(String message) {
+    public CommandException(String message)
+    {
         super(message);
     }
 
-    public CommandException(String message, Throwable cause) {
+    public CommandException(String message, Throwable cause)
+    {
         super(message, cause);
     }
 
-    public CommandException(Throwable cause) {
+    public CommandException(Throwable cause)
+    {
         super(cause);
     }
 }

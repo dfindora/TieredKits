@@ -34,13 +34,13 @@ public class FireworkEffectTypeAdapter extends TypeAdapter<FireworkEffect>
             if (value.getColors() != null && !value.getColors().isEmpty())
             {
                 out.name("colors");
-                ItemStackTypeAdapter.GSON.toJson(value.getColors(), colorListType, out);
+                BaseTypeAdapter.GSON.toJson(value.getColors(), colorListType, out);
             }
 
             if (value.getFadeColors() != null && !value.getFadeColors().isEmpty())
             {
                 out.name("fadeColors");
-                ItemStackTypeAdapter.GSON.toJson(value.getColors(), colorListType, out);
+                BaseTypeAdapter.GSON.toJson(value.getColors(), colorListType, out);
             }
 
             if (value.hasFlicker())
@@ -83,12 +83,12 @@ public class FireworkEffectTypeAdapter extends TypeAdapter<FireworkEffect>
                         fireworkType = org.bukkit.FireworkEffect.Type.valueOf(in.nextString().toUpperCase());
                         break;
                     case "colors":
-                        colors = ItemStackTypeAdapter.GSON.fromJson(in, colorListType);
+                        colors = BaseTypeAdapter.GSON.fromJson(in, colorListType);
                         break;
                     case "fade-colors":
                     case "fade_colors":
                     case "fadecolors":
-                        fadeColors = ItemStackTypeAdapter.GSON.fromJson(in, colorListType);
+                        fadeColors = BaseTypeAdapter.GSON.fromJson(in, colorListType);
                         break;
                     case "flicker":
                         flicker = in.nextBoolean();

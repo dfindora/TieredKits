@@ -1,6 +1,6 @@
 package com.goldensandsmc.tieredkits;
 
-import com.goldensandsmc.tieredkits.bukkit.adapters.ItemStackTypeAdapter;
+import com.goldensandsmc.tieredkits.bukkit.adapters.BaseTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
@@ -11,8 +11,8 @@ import java.lang.reflect.Type;
 public class JsonUtils
 {
     private static final Gson gson =
-            ItemStackTypeAdapter.gsonBuilderWithItemSerializers().serializeNulls().setPrettyPrinting()
-                                .disableHtmlEscaping().create();
+            BaseTypeAdapter.gsonBuilderWithItemSerializers().serializeNulls().setPrettyPrinting()
+                           .disableHtmlEscaping().create();
 
     public JsonUtils()
     {

@@ -35,7 +35,7 @@ public class CraftMetaBookTypeAdapter extends TypeAdapter<CraftMetaBook>
             if(pages != null && !pages.isEmpty())
             {
                 out.name("pages");
-                ItemStackTypeAdapter.GSON.toJson(pages, pageType, out);
+                BaseTypeAdapter.GSON.toJson(pages, pageType, out);
             }
             out.endObject();
         }
@@ -68,7 +68,7 @@ public class CraftMetaBookTypeAdapter extends TypeAdapter<CraftMetaBook>
                         author = in.nextString();
                         break;
                     case "pages":
-                        pages = ItemStackTypeAdapter.GSON.fromJson(in, pageType);
+                        pages = BaseTypeAdapter.GSON.fromJson(in, pageType);
                         break;
                 }
             }

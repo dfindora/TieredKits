@@ -1,7 +1,7 @@
 package com.goldensandsmc.tieredkits.bukkit.commands;
 
 import com.goldensandsmc.tieredkits.bukkit.TieredKits;
-import com.goldensandsmc.tieredkits.bukkit.adapters.ItemStackTypeAdapter;
+import com.goldensandsmc.tieredkits.bukkit.adapters.BaseTypeAdapter;
 import com.shortcircuit.utils.bukkit.command.BaseCommand;
 import com.shortcircuit.utils.bukkit.command.CommandType;
 import com.shortcircuit.utils.bukkit.command.exceptions.CommandException;
@@ -59,7 +59,7 @@ public class ToJsonCommand extends BaseCommand<Player>
             target = ((ItemStack) target).getItemMeta();
         }
 
-        String json = ItemStackTypeAdapter.gsonBuilderWithItemSerializers().create().toJson(target);
+        String json = BaseTypeAdapter.gsonBuilderWithItemSerializers().create().toJson(target);
         this.getPlugin().getLogger().info(json);
         return new String[]{json};
     }

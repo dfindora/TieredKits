@@ -49,7 +49,7 @@ public class GameProfileTypeAdapter extends TypeAdapter
             if (id != null)
             {
                 out.name("id");
-                ItemStackTypeAdapter.GSON.toJson(id, UUID.class, out);
+                BaseTypeAdapter.GSON.toJson(id, UUID.class, out);
             }
 
             if (name != null)
@@ -80,7 +80,7 @@ public class GameProfileTypeAdapter extends TypeAdapter
                 {
                     case "id":
                     case "uuid":
-                        id = ItemStackTypeAdapter.GSON.fromJson(in, UUID.class);
+                        id = BaseTypeAdapter.GSON.fromJson(in, UUID.class);
                         break;
                     case "name":
                     case "username":

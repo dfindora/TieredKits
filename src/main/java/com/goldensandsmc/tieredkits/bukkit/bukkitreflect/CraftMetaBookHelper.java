@@ -17,8 +17,8 @@ public class CraftMetaBookHelper
     {
         try
         {
-            Class<?> craftMetaItemClass = ReflectionHelper.getCraftbukkitClass("inventory.CrafMetaItem");
-            Class<?> craftMetaBookClass = ReflectionHelper.getCraftbukkitClass("inventory.CrafMetaBook");
+            Class<?> craftMetaItemClass = ReflectionHelper.getCraftbukkitClass("inventory.CraftMetaItem");
+            Class<?> craftMetaBookClass = ReflectionHelper.getCraftbukkitClass("inventory.CraftMetaBook");
             Constructor<?> craftMetaBookConst = ReflectionHelper.getConstructor(craftMetaBookClass, craftMetaItemClass);
             craftMetaBookConst.setAccessible(true);
             CraftMetaBook craftMetaBook = (CraftMetaBook) craftMetaBookConst.newInstance((Object) null);

@@ -70,6 +70,10 @@ public class BaseTypeAdapter
                 {
                     itemMeta = GSON.fromJson(element, CraftMetaBlockState.class);
                 }
+                else if(itemMeta instanceof EnchantmentStorageMeta)
+                {
+                    itemMeta = GSON.fromJson(element, EnchantmentStorageMeta.class);
+                }
                 else
                 {
                     for(Map.Entry<String, JsonElement> entry : ((JsonObject) element).entrySet())

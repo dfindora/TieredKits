@@ -13,6 +13,7 @@ import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
@@ -42,7 +43,9 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
                     try
                     {
                         out.name("meta");
-                        BaseTypeAdapter.GSON.toJson(meta, meta.getClass(), out);
+                        Class<?> clazz = (meta instanceof EnchantmentStorageMeta) ? EnchantmentStorageMeta.class
+                                                                                  : meta.getClass();
+                        BaseTypeAdapter.GSON.toJson(meta, clazz, out);
                     }
                     catch (JsonIOException | AssertionError e)
                     {

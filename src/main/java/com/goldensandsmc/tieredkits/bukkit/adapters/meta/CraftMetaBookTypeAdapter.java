@@ -1,5 +1,6 @@
-package com.goldensandsmc.tieredkits.bukkit.adapters;
+package com.goldensandsmc.tieredkits.bukkit.adapters.meta;
 
+import com.goldensandsmc.tieredkits.bukkit.adapters.BaseTypeAdapter;
 import com.goldensandsmc.tieredkits.bukkit.bukkitreflect.CraftMetaBookHelper;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.TypeAdapter;

@@ -1,6 +1,8 @@
 package com.goldensandsmc.tieredkits.bukkit.adapters;
 
+import com.goldensandsmc.tieredkits.bukkit.bukkitreflect.CraftMetaBlockStateHelper;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -8,6 +10,7 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -34,12 +37,22 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
             if (value.hasItemMeta())
             {
                 ItemMeta meta = value.getItemMeta();
-                out.name("meta");
                 if (meta != null)
                 {
-                    System.out.println("class = " + meta.getClass());
-                    System.out.println("name = " + meta.getDisplayName());
-                    BaseTypeAdapter.GSON.toJson(meta, meta.getClass(), out);
+                    try
+                    {
+                        out.name("meta");
+                        BaseTypeAdapter.GSON.toJson(meta, meta.getClass(), out);
+                    }
+                    catch (JsonIOException | AssertionError e)
+                    {
+                        e.printStackTrace();
+                        System.out.println("Unable to serialize ItemMeta.");
+                        System.out.println("Class = " + meta.getClass());
+                        System.out.println("Item = " + value.getType().name());
+                        out.nullValue();
+
+                    }
                 }
                 else
                 {
@@ -104,7 +117,10 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
                         break;
                     case "meta":
                     case "metadata":
-                        rawMeta = BaseTypeAdapter.GSON.fromJson(in, JsonElement.class);
+                        if (in.peek() != JsonToken.NULL)
+                        {
+                            rawMeta = BaseTypeAdapter.GSON.fromJson(in, JsonElement.class);
+                        }
                         break;
                 }
 
@@ -114,7 +130,15 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
             if (type != null)
             {
                 ItemStack item = new ItemStack(type, amount, durability);
-                item.setItemMeta(BaseTypeAdapter.deserializeMeta(rawMeta, type));
+                if(rawMeta != null && rawMeta.toString().contains("\"blockMaterial\""))
+                {
+                    item.setItemMeta(BaseTypeAdapter.deserializeMeta(rawMeta, CraftMetaBlockStateHelper.craftMetaBlockState(
+                            Bukkit.getItemFactory().getItemMeta(type), type)));
+                }
+                else
+                {
+                    item.setItemMeta(BaseTypeAdapter.deserializeMeta(rawMeta, Bukkit.getItemFactory().getItemMeta(type)));
+                }
                 return item;
             }
             else

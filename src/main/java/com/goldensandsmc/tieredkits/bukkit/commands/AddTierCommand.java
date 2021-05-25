@@ -27,12 +27,12 @@ public class AddTierCommand extends BaseCommand<Player>
 
     public String getCommandName()
     {
-        return "addtier";
+        return "addkittier";
     }
 
     public String[] getCommandAliases()
     {
-        return new String[]{"atier"};
+        return new String[]{"addtier","atier"};
     }
 
     public CommandType getCommandType()

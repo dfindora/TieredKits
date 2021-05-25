@@ -21,13 +21,13 @@ public class RemoveTierCommand extends BaseCommand<CommandSender>
     @Override
     public String getCommandName()
     {
-        return "removetier";
+        return "removekittier";
     }
 
     @Override
     public String[] getCommandAliases()
     {
-        return new String[]{"rtier"};
+        return new String[]{"removetier","rtier"};
     }
 
     @Override

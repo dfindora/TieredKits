@@ -89,7 +89,7 @@ public class CreateKitCommand extends BaseCommand<CommandSender>
                 kit = new Kit(cooldownSeconds, new ArrayList<>());
                 plugin.getKits().put(name, kit);
                 plugin.saveKits();
-                return new String[]{"Created an empty kit. Use " + ChatColor.GOLD + "/addtier " + name
+                return new String[]{"Created an empty kit. Use " + ChatColor.GOLD + "/addkittier " + name
                                     + ChatColor.AQUA + " to add tiers."};
             }
         }

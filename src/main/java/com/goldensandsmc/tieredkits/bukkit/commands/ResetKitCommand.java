@@ -64,7 +64,7 @@ public class ResetKitCommand extends BaseCommand<CommandSender>
     {
         if(args.size() < 3)
         {
-            throw new TooFewArgumentsException("Too few arguments. Usage: " + getCommandUsage()[0]);
+            throw new TooFewArgumentsException(getCommandUsage()[0]);
         }
         String type = args.remove(0);
         Player player = this.getPlugin().getServer().getPlayer(args.remove(0));
@@ -99,7 +99,7 @@ public class ResetKitCommand extends BaseCommand<CommandSender>
                 }
                 else
                 {
-                    throw new TooManyArgumentsException("Too many arguments. Usage: " + getCommandUsage()[0]);
+                    throw new TooManyArgumentsException(getCommandUsage()[0]);
                 }
             case "usage":
                 if(args.size() == 1)
@@ -109,11 +109,11 @@ public class ResetKitCommand extends BaseCommand<CommandSender>
                 }
                 else if(args.size() == 0)
                 {
-                    throw new TooFewArgumentsException("Too few arguments. Usage: " + getCommandUsage()[0]);
+                    throw new TooFewArgumentsException(getCommandUsage()[0]);
                 }
                 else
                 {
-                    throw new TooManyArgumentsException("Too many arguments. Usage: " + getCommandUsage()[0]);
+                    throw new TooManyArgumentsException(getCommandUsage()[0]);
                 }
             case "lastused":
                 if(args.size() == 1)
@@ -123,11 +123,11 @@ public class ResetKitCommand extends BaseCommand<CommandSender>
                 }
                 else if(args.size() == 0)
                 {
-                    throw new TooFewArgumentsException("Too few arguments. Usage: " + getCommandUsage()[0]);
+                    throw new TooFewArgumentsException(getCommandUsage()[0]);
                 }
                 else
                 {
-                    throw new TooManyArgumentsException("Too many arguments. Usage: " + getCommandUsage()[0]);
+                    throw new TooManyArgumentsException(getCommandUsage()[0]);
                 }
             default:
                 throw new InvalidArgumentException("invalid type. Expected <reset|usage|lastused>");

@@ -93,7 +93,7 @@ public class CreateKitCommand extends BaseCommand<CommandSender>
         }
         else
         {
-            throw new TooFewArgumentsException("Too few arguments. Usage: " + getCommandUsage()[0]);
+            throw new TooFewArgumentsException(getCommandUsage()[0]);
         }
     }
 }

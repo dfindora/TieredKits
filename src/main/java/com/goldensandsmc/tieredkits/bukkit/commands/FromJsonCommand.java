@@ -54,7 +54,7 @@ public class FromJsonCommand extends BaseCommand<CommandSender>
     {
         if (args.isEmpty())
         {
-            throw new TooFewArgumentsException("Too few arguments. Usage: " + getCommandUsage()[0]);
+            throw new TooFewArgumentsException(getCommandUsage()[0]);
         }
         else
         {

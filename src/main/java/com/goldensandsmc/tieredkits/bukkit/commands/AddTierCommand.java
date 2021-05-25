@@ -18,21 +18,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class EditKitCommand extends BaseCommand<Player>
+public class AddTierCommand extends BaseCommand<Player>
 {
-    public EditKitCommand(TieredKits plugin)
+    public AddTierCommand(TieredKits plugin)
     {
         super(plugin);
     }
 
     public String getCommandName()
     {
-        return "editkit";
+        return "addtier";
     }
 
     public String[] getCommandAliases()
     {
-        return new String[]{"ekit"};
+        return new String[]{"atier"};
     }
 
     public CommandType getCommandType()
@@ -42,17 +42,17 @@ public class EditKitCommand extends BaseCommand<Player>
 
     public String[] getCommandDescription()
     {
-        return new String[]{"Create and manage kits"};
+        return new String[]{"add a new tier to an existing kit."};
     }
 
     public String[] getCommandUsage()
     {
-        return new String[]{"/" + getCommandName() + " <name> [<uses> <cascade:true|false>]"};
+        return new String[]{"/" + getCommandName() + " <name> <index> [<uses> <cascade:true|false>]"};
     }
 
     public String getCommandPermission()
     {
-        return "essentials.kit.edit";
+        return "essentials.kit.tier.add";
     }
 
     public String[] exec(Player sender, String command, ConcurrentArrayList<String> args) throws CommandException
@@ -68,23 +68,37 @@ public class EditKitCommand extends BaseCommand<Player>
             if (plugin.getKits().containsKey(name))
             {
                 Kit kit = plugin.getKits().get(name);
-                if (args.size() < 2)
+                if (args.size() < 3)
                 {
-                    throw new TooFewArgumentsException("Too few arguments. Usage: " + getCommandUsage()[0]);
+                    throw new TooFewArgumentsException(getCommandUsage()[0]);
                 }
                 else
                 {
-                    int uses;
+                    int index;
                     try
                     {
-                        uses = Integer.parseInt(args.get(0));
+                        index = Integer.parseInt(args.get(0));
                     }
                     catch (NumberFormatException e)
                     {
                         throw new InvalidArgumentException("Unable to parse number: " + args.get(0));
                     }
+                    if(kit.getTierIndexes().contains(index))
+                    {
+                        throw new InvalidArgumentException("This kit already contains a tier with that index.");
+                    }
 
-                    boolean cascade = args.get(1).matches("t(rue)?|y(es)?|1");
+                    int uses;
+                    try
+                    {
+                        uses = Integer.parseInt(args.get(1));
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        throw new InvalidArgumentException("Unable to parse number: " + args.get(1));
+                    }
+
+                    boolean cascade = args.get(2).matches("t(rue)?|y(es)?|1");
                     PlayerInventory inventory = sender.getInventory();
                     LinkedList<ItemStack> items = new LinkedList<>();
                     LinkedList<BonusItem> bonusItems = new LinkedList<>();
@@ -117,7 +131,7 @@ public class EditKitCommand extends BaseCommand<Player>
                         }
                     }
 
-                    KitTier tier = new KitTier(uses, cascade, items, bonusItems);
+                    KitTier tier = new KitTier(index, uses, cascade, items, bonusItems);
                     kit.getTiers().add(tier);
                     plugin.saveKits();
                     return new String[]{"Added tier."};

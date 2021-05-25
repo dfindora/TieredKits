@@ -93,7 +93,7 @@ public class Utils
 
     public static KitTier getMaxTier(Kit kit, KitUsage usage)
     {
-        KitTier maxTier = new KitTier(0, false, null, null);
+        KitTier maxTier = new KitTier(0, 0, false, null, null);
         for (KitTier tier : kit.getTiers())
         {
             boolean canUse = usage.getTotalUses() >= tier.getUsesRequired();

@@ -8,17 +8,29 @@ import org.bukkit.inventory.ItemStack;
 
 public class KitTier
 {
+    private int index;
     private int usesRequired;
     private boolean cascade;
     private LinkedList<ItemStack> items;
     private LinkedList<BonusItem> bonuses;
 
-    public KitTier(int usesRequired, boolean cascade, Collection<ItemStack> items, Collection<BonusItem> bonuses)
+    public KitTier(int index, int usesRequired, boolean cascade, Collection<ItemStack> items, Collection<BonusItem> bonuses)
     {
+        this.index = index;
         this.usesRequired = usesRequired;
         this.cascade = cascade;
         this.items = items == null ? null : new LinkedList<>(items);
         this.bonuses = bonuses == null ? null : new LinkedList<>(bonuses);
+    }
+
+    public int getIndex()
+    {
+        return index;
+    }
+
+    public void setIndex(int index)
+    {
+        this.index = index;
     }
 
     public int getUsesRequired()

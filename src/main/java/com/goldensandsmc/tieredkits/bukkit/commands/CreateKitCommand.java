@@ -11,6 +11,8 @@ import com.shortcircuit.utils.collect.ConcurrentArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+
 public class CreateKitCommand extends BaseCommand<CommandSender>
 {
     public CreateKitCommand(TieredKits plugin)
@@ -84,11 +86,11 @@ public class CreateKitCommand extends BaseCommand<CommandSender>
             }
             else
             {
-                kit = new Kit(cooldownSeconds, null);
+                kit = new Kit(cooldownSeconds, new ArrayList<>());
                 plugin.getKits().put(name, kit);
                 plugin.saveKits();
-                return new String[]{"Created an empty kit. Use " + ChatColor.GOLD + "/editkit " + name
-                                    + ChatColor.AQUA + " to edit this kit."};
+                return new String[]{"Created an empty kit. Use " + ChatColor.GOLD + "/addtier " + name
+                                    + ChatColor.AQUA + " to add tiers."};
             }
         }
         else

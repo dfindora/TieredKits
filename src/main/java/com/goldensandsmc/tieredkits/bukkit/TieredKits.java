@@ -57,12 +57,13 @@ public class TieredKits extends JavaPlugin
         CommandRegister.register(new ToJsonCommand(this));
         CommandRegister.register(new FromJsonCommand(this));
         CommandRegister.register(new KitCommand(this));
-        CommandRegister.register(new EditKitCommand(this));
+        CommandRegister.register(new AddTierCommand(this));
         CommandRegister.register(new PreviewKitCommand(this));
         CommandRegister.register(new ResetKitCommand(this));
         CommandRegister.register(new ReloadKitCommand(this));
         CommandRegister.register(new CreateKitCommand(this));
         CommandRegister.register(new RemoveKitCommand(this));
+        CommandRegister.register(new RemoveTierCommand(this));
         this.getServer().getPluginManager().registerEvents(new KitPreviewListener(), this);
         this.loadUsages();
         this.loadKits();

@@ -4,6 +4,7 @@
       "cooldown": 6000,
       "tiers": [
         {
+          "index": 1,
           "usesRequired": 0,
           "cascade": true,
           "items": [
@@ -23,6 +24,7 @@
           "bonuses": []
         },
         {
+          "index": 2,
           "usesRequired": 5,
           "cascade": true,
           "items": [
@@ -47,6 +49,7 @@
       "cooldown": 0,
       "tiers": [
         {
+          "index": 1,
           "usesRequired": 0,
           "cascade": false,
           "items": [
@@ -66,6 +69,7 @@
           "bonuses": []
         },
         {
+          "index": 2,
           "usesRequired": 1,
           "cascade": false,
           "items": [
@@ -85,6 +89,7 @@
           "bonuses": []
         },
         {
+          "index": 3,
           "usesRequired": 2,
           "cascade": false,
           "items": [
@@ -104,6 +109,7 @@
           "bonuses": []
         },
         {
+          "index": 4,
           "usesRequired": 3,
           "cascade": false,
           "items": [

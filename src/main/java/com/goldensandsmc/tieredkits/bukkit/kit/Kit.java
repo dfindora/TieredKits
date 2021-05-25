@@ -1,5 +1,6 @@
 package com.goldensandsmc.tieredkits.bukkit.kit;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,5 +34,27 @@ public class Kit
         }
 
         return this.tiers;
+    }
+
+    public List<Integer> getTierIndexes()
+    {
+        List<Integer> indexes = new ArrayList<>();
+        for(KitTier tier : tiers)
+        {
+            indexes.add(tier.getIndex());
+        }
+        return indexes;
+    }
+
+    public void removeTierByIndex(int index)
+    {
+        for(KitTier tier : tiers)
+        {
+            if(tier.getIndex() == index)
+            {
+                tiers.remove(tier);
+                break;
+            }
+        }
     }
 }

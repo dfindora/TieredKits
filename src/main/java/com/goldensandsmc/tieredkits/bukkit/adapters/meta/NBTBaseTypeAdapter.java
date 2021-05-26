@@ -1,6 +1,7 @@
 package com.goldensandsmc.tieredkits.bukkit.adapters.meta;
 
 import com.goldensandsmc.tieredkits.bukkit.adapters.BaseTypeAdapter;
+import com.goldensandsmc.tieredkits.bukkit.bukkitreflect.ReflectionHelper;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -8,7 +9,7 @@ import com.google.gson.stream.JsonWriter;
 import net.minecraft.server.v1_12_R1.*;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.lang.reflect.Field;
 
 public class NBTBaseTypeAdapter extends TypeAdapter<NBTBase>
 {
@@ -78,35 +79,102 @@ public class NBTBaseTypeAdapter extends TypeAdapter<NBTBase>
         }
     }
 
-
     private Object castNBTBase(NBTBase tag)
     {
         String type = NBTBase.j(tag.getTypeId());
+        String substring = tag.toString().substring(0, tag.toString().length() - 1);
         switch (type)
         {
             case "TAG_Byte":
-                return Byte.parseByte(tag.toString());
+                return Byte.parseByte(substring);
             case "TAG_Short":
-                return Short.parseShort(tag.toString());
+                return Short.parseShort(substring);
             case "TAG_Int":
                 return Integer.parseInt(tag.toString());
             case "TAG_Long":
-                return Long.parseLong(tag.toString());
+                return Long.parseLong(substring);
             case "TAG_Float":
-                return Float.parseFloat(tag.toString());
+                return Float.parseFloat(substring);
             case "TAG_Double":
-                return Double.parseDouble(tag.toString());
+                return Double.parseDouble(substring);
             case "TAG_Byte_Array":
-                return tag.toString().getBytes(StandardCharsets.UTF_8);
+                return parseArray(tag.toString(), Byte.class);
             case "TAG_String":
-                return tag.toString().substring(1,tag.toString().length() - 1);
-            case "TAG_End":
-            case "TAG_List":
-            case "TAG_Compound":
+                return (tag.toString().charAt(0) == '\"' && tag.toString().charAt(tag.toString().length()) == '\"')
+                       ? tag.toString().substring(1,tag.toString().length() - 1) : tag.toString();
             case "TAG_Int_Array":
+                return parseArray(tag.toString(), Integer.class);
             case "TAG_Long_Array":
+                return parseArray(tag.toString(), Long.class);
+            case "TAG_End":
+                return tag.toString();
+            case "TAG_List":
+                try
+                {
+                    Field nbtList = ReflectionHelper.getField(ReflectionHelper.getNMSClass("NBTTagList"), "list");
+                    nbtList.setAccessible(true);
+                    return nbtList.get(tag);
+                }
+                catch (ReflectiveOperationException e)
+                {
+                    e.printStackTrace();
+                    return null;
+                }
+            case "TAG_Compound":
+                try
+                {
+                    Field nbtMap = ReflectionHelper.getField(ReflectionHelper.getNMSClass("NBTTagCompound"), "map");
+                    nbtMap.setAccessible(true);
+                    return nbtMap.get(tag);
+                }
+                catch (ReflectiveOperationException e)
+                {
+                    e.printStackTrace();
+                    return null;
+                }
             default:
                 return null;
+        }
+    }
+
+    private Object[] parseArray(String arrayString, Class<?> type)
+    {
+        arrayString = arrayString.substring(3, arrayString.length() - 1);
+        arrayString = arrayString.replaceAll("b", "");
+        String[] substringedArray = arrayString.split(",");
+        Object[] byteArr = new Byte[substringedArray.length];
+        Object[] intArr = new Integer[substringedArray.length];
+        Object[] longArr = new Long[substringedArray.length];
+        for(int i = 0; i < substringedArray.length; i++)
+        {
+            if(type == Byte.class)
+            {
+                byteArr[i] = Byte.parseByte(substringedArray[i]);
+            }
+            else if(type == Integer.class)
+            {
+                intArr[i] = Integer.parseInt(substringedArray[i]);
+            }
+            else if(type == Long.class)
+            {
+                longArr[i] = Long.parseLong(substringedArray[i]);
+            }
+        }
+        if(type == Byte.class)
+        {
+            return byteArr;
+        }
+        else if(type == Integer.class)
+        {
+            return intArr;
+        }
+        else if(type == Long.class)
+        {
+            return longArr;
+        }
+        else
+        {
+            return null;
         }
     }
 }

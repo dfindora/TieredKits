@@ -98,6 +98,7 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack>
                                 break;
                             }
                         }
+                        break;
                     case "type":
                         try
                         {

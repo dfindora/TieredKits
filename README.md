@@ -3,7 +3,7 @@ TieredKits plugin initially developed by ShortCircuit908.
 ## Commands
 |Command|Parameters|Aliases|Description
 |----|----|----|----
-|/addkittier|\<name\> \<index\> \<uses\> \<cascade\>|/addtier, /atier|adds a tier to the target kit, named with the index, with the specified minimum required uses and cascade. If cascade is true, this tier will be given on every usage above and including the number of uses at which this is unlocked. Otherwise, it will only be given until the next tier is unlocked. Basic items should be placed in the top 9 slots of your inventory and the hotbar, while bonus items should be in the middle rows.
+|/addkittier|\<name\> \<index\> \<uses\> \<cascade\>|/addtier, /atier|adds a tier to the target kit, named with the index, with the specified minimum required uses and cascade. If cascade is true, this tier will be given on every usage above and including the number of uses at which this is unlocked. Otherwise, it will only be given until the next tier is unlocked. Basic items should be placed in the bottom 9 slots of your inventory and the hotbar, while bonus items should be in the top 2 rows.
 |/createkit|\<name\> [\<cooldown\>]|/ckit|creates an empty kit with the specified name with the cooldown in seconds if provided. If no cooldown is provided, it will default to 0 seconds.
 |/fromjson|\<player\> \<json\>|/itemfromjson, /jsontoitem, /toitem|attempts to convert json into an item and gives it to the player.
 |/kit|<name> [\<other\>]|/kits|uses the specified kit, if able. If a user is provided, it will use the kit for the specified user based on whether the command sender can use the kit.
